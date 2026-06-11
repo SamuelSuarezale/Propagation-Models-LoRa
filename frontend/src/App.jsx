@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
 import Home from './pages/Home'
 import Dashboard from './pages/Dashboard'
+import Measurements from './pages/Measurements'
 import './App.css'
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/measurements" element={<div>Mediciones</div>} />
+            <Route path="/measurements" element={<Measurements/>} />
             <Route path="/models" element={<div>Modelos</div>} />
           </Routes>
         </main>

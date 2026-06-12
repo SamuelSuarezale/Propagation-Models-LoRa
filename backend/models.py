@@ -19,3 +19,16 @@ class MeasurementResponse(MeasurementBase):
 
     class Config:
         from_attributes = True
+
+class PointSummary(BaseModel):
+    distancia: int
+    count: int
+    rssi_avg: float
+    snr_avg: float
+    rssi_std: float
+
+class SessionSummaryResponse(BaseModel):
+    escenario: str
+    total_points: int
+    completed_points: int
+    summary: list[PointSummary]

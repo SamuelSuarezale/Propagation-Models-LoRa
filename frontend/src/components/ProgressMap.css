@@ -1,0 +1,150 @@
+.progress-map {
+    background: #111c2e;
+    border: 1px solid #1e3a5f;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+
+.progress-map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.progress-map-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.progress-map-count {
+    font-size: 13px;
+    font-weight: 700;
+    color: #e2e8f0;
+}
+
+/* ── Track ── */
+.progress-map-track {
+    position: relative;
+    height: 48px;
+    margin: 0 12px;
+}
+
+.track-line-bg {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #1e293b;
+    border-radius: 2px;
+    transform: translateY(-50%);
+}
+
+.track-line-fill {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 3px;
+    border-radius: 2px;
+    transform: translateY(-50%);
+    transition: width 0.5s ease;
+}
+
+.track-point-wrapper {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: default;
+}
+
+.track-point {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #334155;
+    background: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.track-point.done {
+    border-width: 2px;
+}
+
+.track-point.active {
+    border-width: 2px;
+    animation: point-pulse 1.5s infinite;
+}
+
+.track-point.pending {
+    opacity: 0.5;
+}
+
+@keyframes point-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.5); }
+    70%  { box-shadow: 0 0 0 6px rgba(14, 165, 233, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0); }
+}
+
+.point-check {
+    font-size: 9px;
+    color: #fff;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.point-active-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.track-label {
+    font-size: 9px;
+    color: #475569;
+    white-space: nowrap;
+    margin-top: 18px;
+    position: absolute;
+    top: 100%;
+}
+
+/* ── Legend (últimos puntos completados) ── */
+.progress-map-legend {
+    display: flex;
+    gap: 8px;
+    margin-top: 28px;
+    justify-content: flex-end;
+}
+
+.legend-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid;
+    border-radius: 8px;
+    padding: 6px 10px;
+    min-width: 70px;
+}
+
+.legend-dist {
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.legend-stat {
+    font-size: 10px;
+    color: #94a3b8;
+}

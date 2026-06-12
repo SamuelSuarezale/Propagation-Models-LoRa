@@ -103,8 +103,15 @@ function Models() {
         }))
     }
 
-    const losChart = addTheoretical(processData(losData), nLOS, 400)
-    const nlosChart = addTheoretical(processData(nlosData), nNLOS, 200)
+    const losProcessed  = processData(losData)
+    const nlosProcessed = processData(nlosData)
+
+    // maxDist dinámico según los datos reales capturados
+    const losMaxDist  = losProcessed.length  > 0 ? losProcessed[losProcessed.length - 1].distancia  : 400
+    const nlosMaxDist = nlosProcessed.length > 0 ? nlosProcessed[nlosProcessed.length - 1].distancia : 208
+
+    const losChart  = addTheoretical(losProcessed,  nLOS,  Math.max(losMaxDist,  400))
+    const nlosChart = addTheoretical(nlosProcessed, nNLOS, Math.max(nlosMaxDist, 208))
 
     const theoreticalLines = [
         { key: 'log_distance', color: '#a855f7', name: 'Log-Distance' },
@@ -134,20 +141,30 @@ function Models() {
 
             {loading ? (
                 <p className="models-loading">Cargando datos...</p>
+            ) : losData.length === 0 && nlosData.length === 0 ? (
+                <div className="models-empty">
+                    <p className="models-empty-icon">📡</p>
+                    <p className="models-empty-title">Sin datos de medición aún</p>
+                    <p className="models-empty-sub">Realiza las capturas en el Dashboard para que los modelos de propagación aparezcan aquí automáticamente.</p>
+                </div>
             ) : (
                 <div className="models-charts-grid">
-                    <ModelChart
-                        title="LOS — Línea de Visión Directa"
-                        measuredData={losChart}
-                        theoreticalLines={theoreticalLines}
-                        color="#0ea5e9"
-                    />
-                    <ModelChart
-                        title="NLOS — Sin Línea de Visión"
-                        measuredData={nlosChart}
-                        theoreticalLines={theoreticalLines}
-                        color="#f59e0b"
-                    />
+                    {losData.length > 0 && (
+                        <ModelChart
+                            title="LOS — Línea de Visión Directa"
+                            measuredData={losChart}
+                            theoreticalLines={theoreticalLines}
+                            color="#0ea5e9"
+                        />
+                    )}
+                    {nlosData.length > 0 && (
+                        <ModelChart
+                            title="NLOS — Sin Línea de Visión"
+                            measuredData={nlosChart}
+                            theoreticalLines={theoreticalLines}
+                            color="#f59e0b"
+                        />
+                    )}
                 </div>
             )}
         </div>

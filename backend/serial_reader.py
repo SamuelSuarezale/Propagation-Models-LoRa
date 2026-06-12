@@ -19,6 +19,7 @@ class SerialReaderManager:
         self.target_samples = 30
         self.samples_captured = 0
         self.last_error = None
+        self.latest_measurement = None
 
     def get_available_ports(self):
         try:
@@ -31,45 +32,53 @@ class SerialReaderManager:
     def _read_loop(self, port, escenario, distancia, target_samples):
         self.last_error = None
         self.samples_captured = 0
-        
+
+        # ── Abrir puerto ─────────────────────────────────────────────
         try:
             print(f"Abriendo puerto Serial {port}...")
             self.ser = serial.Serial(port, BAUD_RATE, timeout=0.5)
-            # Give some time for Heltec board to initialize/reset
+            # Dar tiempo al módulo Heltec para inicializarse
             time.sleep(1.5)
         except Exception as e:
             self.last_error = f"No se pudo abrir el puerto {port}: {str(e)}"
-            self.is_running = False
+            self.is_running = False   # Corrección race condition: solo False si falla
             print(self.last_error)
             return
 
-        print(f"Lectura Serial iniciada en {port} - Escenario: {escenario} - Distancia: {distancia}m - Objetivo: {target_samples} muestras")
-        
+        print(f"Lectura Serial iniciada en {port} — Escenario: {escenario} — Distancia: {distancia}m — Objetivo: {target_samples} muestras")
+
+        # ── Bucle de lectura ─────────────────────────────────────────
+        rssi_values = []   # Para calcular σ al finalizar el punto
         try:
-            # Clear input buffer to discard stale data
             self.ser.reset_input_buffer()
-            
+
             while not self.stop_event.is_set() and self.samples_captured < target_samples:
-                # Read a line from serial
                 if self.ser.in_waiting > 0:
                     try:
                         line = self.ser.readline().decode("utf-8", errors="ignore")
                         if line.strip():
                             data = self.parse_data(line)
                             if data:
-                                # Inject current distance from UI configuration
                                 data["distancia"] = distancia
                                 self.save_measurement(data, escenario)
+                                self.latest_measurement = data
+                                rssi_values.append(data["rssi"])
                                 self.samples_captured += 1
-                                print(f"[{escenario}] Muestra {self.samples_captured}/{target_samples} guardada: RSSI={data['rssi']}dBm")
+                                print(f"[{escenario}] Muestra {self.samples_captured}/{target_samples} — RSSI={data['rssi']}dBm")
                     except Exception as le:
                         print(f"Error leyendo línea serial: {le}")
                 else:
-                    time.sleep(0.05)  # Yield CPU
-                    
+                    time.sleep(0.05)
+
             if self.samples_captured >= target_samples:
-                print(f"Objetivo alcanzado ({target_samples} muestras). Deteniendo lectura.")
-                
+                # Calcular e imprimir desviación estándar de RSSI del punto
+                if len(rssi_values) > 1:
+                    import statistics
+                    sigma = round(statistics.stdev(rssi_values), 2)
+                    print(f"[{escenario}] Punto {distancia}m completado — σ(RSSI)={sigma} dB ({len(rssi_values)} muestras)")
+                else:
+                    print(f"[{escenario}] Objetivo alcanzado ({target_samples} muestras). Deteniendo lectura.")
+
         except Exception as e:
             self.last_error = f"Error en lectura serial: {str(e)}"
             print(self.last_error)
@@ -85,7 +94,6 @@ class SerialReaderManager:
     def parse_data(self, line: str) -> dict | None:
         try:
             data = json.loads(line.strip())
-            # Basic validation of data structure
             required_fields = ["rssi", "snr", "ruido", "rpm"]
             for field in required_fields:
                 if field not in data:
@@ -105,15 +113,16 @@ class SerialReaderManager:
     def start(self, port: str, escenario: str, distancia: int, target_samples: int):
         if self.is_running:
             self.stop()
-            
+
         self.stop_event.clear()
         self.port = port
         self.escenario = escenario
         self.distancia = distancia
         self.target_samples = target_samples
         self.samples_captured = 0
-        self.is_running = True
-        
+        self.latest_measurement = None
+        self.is_running = True   # Optimista; el thread lo pone False si falla al abrir puerto
+
         self.thread = threading.Thread(
             target=self._read_loop,
             args=(port, escenario, distancia, target_samples),
@@ -130,6 +139,6 @@ class SerialReaderManager:
                 self.ser.close()
             except Exception:
                 pass
-        if self.thread:
-            self.thread.join(timeout=1.0)
-        self.is_running = False
+        if self.thread and self.thread.is_alive():
+            self.thread.join(timeout=2.0)
+        self.is_running = False

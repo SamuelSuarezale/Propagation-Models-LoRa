@@ -5,11 +5,12 @@
     color: #f1f5f9;
 }
 
+/* ── Header ─────────────────────────────────────── */
 .dashboard-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
     padding-bottom: 20px;
     border-bottom: 1px solid #1e3a5f;
 }
@@ -25,11 +26,7 @@
     font-size: 14px;
     color: #64748b;
     margin: 0;
-}
-
-.status-badge-container {
-    display: flex;
-    align-items: center;
+    transition: color 0.3s;
 }
 
 .dashboard-status {
@@ -53,10 +50,15 @@
     border: 1px solid #334155;
 }
 
-/* Dashboard Top Row (Split Control/Status) */
+/* ── Mapa de progreso ───────────────────────────── */
+.dashboard-map-row {
+    margin-bottom: 24px;
+}
+
+/* ── Layout principal ───────────────────────────── */
 .dashboard-top-row {
     display: grid;
-    grid-template-columns: 360px 1fr;
+    grid-template-columns: 380px 1fr;
     gap: 24px;
     align-items: start;
     margin-bottom: 24px;
@@ -68,7 +70,6 @@
     }
 }
 
-/* Dashboard Bottom Row (Full Width Charts) */
 .dashboard-bottom-row {
     width: 100%;
 }
@@ -85,27 +86,32 @@
     gap: 20px;
 }
 
-/* Control Cards */
+/* ── Tarjetas de control ────────────────────────── */
 .control-card {
     background: #111c2e;
     border: 1px solid #1e3a5f;
     border-radius: 12px;
     padding: 24px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    transition: border-color 0.2s ease;
+    transition: border-color 0.3s ease;
 }
 
 .wizard-card {
     border-top: 4px solid #0ea5e9;
 }
 
-.wizard-card:has(.wizard-active) {
+.wizard-card.capturing {
     border-top-color: #22c55e;
 }
 
-.stats-summary-card {
+.point-done-card {
+    border-top: 4px solid #22c55e;
+    background: linear-gradient(160deg, #111c2e 0%, #0d1f10 100%);
+}
+
+.session-complete-card {
     border-top: 4px solid #a855f7;
-    background: linear-gradient(145deg, #111c2e 0%, #15102a 100%);
+    background: linear-gradient(160deg, #111c2e 0%, #150d2a 100%);
 }
 
 .card-header {
@@ -124,7 +130,24 @@
     margin: 0;
 }
 
-/* Setup Form styles */
+.point-badge {
+    background: rgba(30, 58, 95, 0.6);
+    border: 1px solid #1e3a5f;
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+}
+
+.done-distance {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+/* ── Setup form ─────────────────────────────────── */
 .wizard-setup, .wizard-active {
     display: flex;
     flex-direction: column;
@@ -155,7 +178,7 @@
     min-width: 0;
 }
 
-/* Scenario Toggle buttons */
+/* ── Scenario toggles ───────────────────────────── */
 .scenario-toggle-buttons {
     display: flex;
     gap: 8px;
@@ -174,7 +197,12 @@
     transition: all 0.2s ease;
 }
 
-.toggle-btn:hover {
+.toggle-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.toggle-btn:hover:not(:disabled) {
     background: #334155;
     color: #e2e8f0;
 }
@@ -193,13 +221,14 @@
     box-shadow: 0 0 10px rgba(245, 158, 11, 0.1);
 }
 
-/* Port select & refresh button */
+/* ── Puerto + inputs ────────────────────────────── */
 .port-select-wrapper {
     display: flex;
     gap: 8px;
 }
 
-.port-select-wrapper select, .setup-group input[type="number"] {
+.port-select-wrapper select,
+.setup-group input[type="number"] {
     width: 100%;
     box-sizing: border-box;
     background: #1e293b;
@@ -212,7 +241,8 @@
     transition: border-color 0.2s;
 }
 
-.port-select-wrapper select:focus, .setup-group input[type="number"]:focus {
+.port-select-wrapper select:focus,
+.setup-group input[type="number"]:focus {
     border-color: #0ea5e9;
 }
 
@@ -237,77 +267,52 @@
     border-color: #0ea5e9;
 }
 
-/* Distance control with custom stepper buttons */
-.distance-control {
+/* ── Distancia actual (informativo) ─────────────── */
+.current-distance-display {
     display: flex;
     align-items: center;
-    background: #1e293b;
+    justify-content: space-between;
+    background: rgba(30, 41, 59, 0.5);
     border: 1px solid #1e3a5f;
-    border-radius: 8px;
-    overflow: hidden;
+    border-radius: 10px;
+    padding: 14px 18px;
 }
 
-.dist-btn {
-    background: transparent;
-    border: none;
-    color: #94a3b8;
-    padding: 10px 16px;
+.cdd-label {
+    font-size: 11px;
     font-weight: 600;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-}
-
-.dist-btn:hover {
-    background: #1e3a5f;
-    color: #fff;
-}
-
-.distance-input {
-    flex: 1;
-    background: transparent !important;
-    border: none !important;
-    text-align: center;
-    font-size: 16px !important;
-    font-weight: 700;
-    color: #f1f5f9;
-    width: 60px;
-    outline: none;
-}
-
-/* Hide spin buttons */
-.distance-input::-webkit-outer-spin-button,
-.distance-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.unit-label {
-    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     color: #64748b;
-    margin-right: 8px;
-    user-select: none;
 }
 
-/* Buttons */
+.cdd-value {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.cdd-hint {
+    font-size: 11px;
+    color: #475569;
+}
+
+/* ── Botones principales ────────────────────────── */
 .btn-start {
-    background: #0ea5e9;
     color: #fff;
     border: none;
-    padding: 12px;
-    border-radius: 8px;
+    padding: 14px;
+    border-radius: 10px;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
     transition: all 0.2s;
-    margin-top: 6px;
+    margin-top: 4px;
 }
 
 .btn-start:hover {
-    background: #0284c7;
+    filter: brightness(1.1);
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4);
 }
 
 .btn-stop {
@@ -328,7 +333,25 @@
     transform: translateY(-1px);
 }
 
-/* Wizard Active Capture Mode */
+.btn-advance-big {
+    color: #fff;
+    border: none;
+    padding: 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+    letter-spacing: 0.2px;
+}
+
+.btn-advance-big:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+/* ── Wizard Capturing ───────────────────────────── */
 .active-details {
     background: rgba(30, 41, 59, 0.5);
     border: 1px solid #1e3a5f;
@@ -356,12 +379,10 @@
     font-weight: bold;
 }
 
-/* Progress bar styling */
 .progress-section {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin: 8px 0;
 }
 
 .progress-text {
@@ -374,20 +395,195 @@
 .progress-bar-container {
     background: #1e293b;
     border-radius: 10px;
-    height: 10px;
+    height: 12px;
     overflow: hidden;
     border: 1px solid #1e3a5f;
 }
 
 .progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #22c55e 0%, #4ade80 100%);
     border-radius: 10px;
     transition: width 0.3s ease;
-    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
 }
 
-/* Alerts */
+.capture-instruction {
+    font-size: 12px;
+    color: #64748b;
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+    background: rgba(30, 41, 59, 0.3);
+    border-radius: 8px;
+}
+
+/* ── Pulse indicator ────────────────────────────── */
+.pulse-indicator {
+    width: 10px;
+    height: 10px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+    70%  { transform: scale(1);    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+/* ── Point Done — Stats ─────────────────────────── */
+.summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.summary-stat {
+    background: rgba(17, 28, 46, 0.6);
+    border: 1px solid rgba(30, 58, 95, 0.5);
+    padding: 10px 12px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #64748b;
+    letter-spacing: 0.3px;
+    font-weight: 600;
+}
+
+.stat-val {
+    font-size: 16px;
+    font-weight: 700;
+    color: #e2e8f0;
+}
+
+.stat-val.highlighted {
+    color: #22c55e;
+}
+
+.next-point-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.next-point-instruction {
+    font-size: 13px;
+    color: #94a3b8;
+    text-align: center;
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 8px;
+    padding: 12px;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.next-point-instruction strong {
+    color: #f1f5f9;
+}
+
+/* ── Session Complete ───────────────────────────── */
+.complete-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    background: rgba(30, 41, 59, 0.3);
+    border-radius: 8px;
+    padding: 14px;
+}
+
+.complete-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+}
+
+.session-table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 16px;
+}
+
+.session-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.session-table th,
+.session-table td {
+    padding: 8px 10px;
+    text-align: center;
+    border-bottom: 1px solid #1e3a5f;
+}
+
+.session-table th {
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.3px;
+}
+
+.session-table td {
+    color: #e2e8f0;
+    font-weight: 500;
+}
+
+.session-table tr:last-child td {
+    border-bottom: none;
+}
+
+.complete-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-models {
+    background: #a855f7;
+    color: #fff;
+    border: none;
+    padding: 13px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+    transition: all 0.2s;
+}
+
+.btn-models:hover {
+    background: #9333ea;
+    transform: translateY(-1px);
+}
+
+.btn-new-session {
+    background: transparent;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    padding: 11px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-new-session:hover {
+    border-color: #0ea5e9;
+    color: #0ea5e9;
+}
+
+/* ── Alerts ─────────────────────────────────────── */
 .alert-message {
     padding: 12px;
     border-radius: 8px;
@@ -407,100 +603,14 @@
     color: #86efac;
 }
 
-/* Pulse animation indicator for live reading */
-.pulse-indicator {
-    width: 10px;
-    height: 10px;
-    background-color: #22c55e;
-    border-radius: 50%;
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-    }
-    70% {
-        transform: scale(1);
-        box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
-    }
-    100% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
-    }
-}
-
-/* Last Completed Run summary card */
-.summary-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: #a855f7;
-    margin: 0 0 16px 0;
-}
-
-.summary-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.summary-stat {
-    background: rgba(17, 28, 46, 0.4);
-    border: 1px solid rgba(30, 58, 95, 0.5);
-    padding: 10px;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.stat-label {
-    font-size: 10px;
-    text-transform: uppercase;
+/* ── Misc ───────────────────────────────────────── */
+.hint-text {
+    font-size: 12px;
     color: #64748b;
-    letter-spacing: 0.3px;
+    margin: 0;
 }
 
-.stat-val {
-    font-size: 15px;
-    font-weight: 700;
-    color: #e2e8f0;
-}
-
-.stat-val.highlighted {
-    color: #a855f7;
-}
-
-.btn-advance {
-    background: #a855f7;
-    color: #fff;
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    width: 100%;
-    box-shadow: 0 4px 10px rgba(168, 85, 247, 0.2);
-    transition: all 0.2s;
-}
-
-.btn-advance:hover {
-    background: #9333ea;
-    box-shadow: 0 6px 14px rgba(168, 85, 247, 0.3);
-}
-
-/* Right display container charts */
-.chart-card {
-    background: #111c2e;
-    border: 1px solid #1e3a5f;
-    border-radius: 12px;
-    padding: 20px;
-}
 .dashboard-loading {
     color: #64748b;
     font-size: 15px;
-}
+}

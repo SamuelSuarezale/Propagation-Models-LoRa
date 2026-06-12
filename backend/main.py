@@ -43,7 +43,8 @@ def get_serial_status():
         "distancia": reader_manager.distancia,
         "samples_captured": reader_manager.samples_captured,
         "target_samples": reader_manager.target_samples,
-        "last_error": reader_manager.last_error
+        "last_error": reader_manager.last_error,
+        "latest_measurement": reader_manager.latest_measurement
     }
 
 @app.post("/serial/start")

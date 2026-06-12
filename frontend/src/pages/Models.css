@@ -79,3 +79,32 @@
     color: #475569;
     margin-top: 8px;
 }
+
+/* ── Estado vacío ─────────────────────────────── */
+.models-empty {
+    text-align: center;
+    padding: 60px 24px;
+    background: #111c2e;
+    border: 1px dashed #1e3a5f;
+    border-radius: 12px;
+}
+
+.models-empty-icon {
+    font-size: 48px;
+    margin: 0 0 16px 0;
+}
+
+.models-empty-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #94a3b8;
+    margin: 0 0 8px 0;
+}
+
+.models-empty-sub {
+    font-size: 14px;
+    color: #475569;
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.6;
+}

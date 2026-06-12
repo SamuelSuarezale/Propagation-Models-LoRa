@@ -1,43 +1,506 @@
-.dashboard {
-    max-width: 1100px;
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
     background-color: #0a0e1a;
+    color: #f1f5f9;
 }
 
 .dashboard-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 32px;
-    padding-bottom: 24px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
     border-bottom: 1px solid #1e3a5f;
 }
 
 .dashboard-title {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 700;
     color: #f1f5f9;
+    margin: 0 0 4px 0;
+}
+
+.dashboard-subtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+.status-badge-container {
+    display: flex;
+    align-items: center;
 }
 
 .dashboard-status {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 600;
     padding: 6px 14px;
     border-radius: 20px;
+    letter-spacing: 0.3px;
 }
 
 .dashboard-status.connected {
     color: #22c55e;
-    background-color: #052e16;
-    border: 1px solid #22c55e;
+    background-color: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.1);
 }
 
 .dashboard-status.disconnected {
     color: #94a3b8;
-    background-color: #1e293b;
+    background-color: rgba(30, 41, 59, 0.5);
     border: 1px solid #334155;
 }
 
+/* Dashboard Top Row (Split Control/Status) */
+.dashboard-top-row {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 950px) {
+    .dashboard-top-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Dashboard Bottom Row (Full Width Charts) */
+.dashboard-bottom-row {
+    width: 100%;
+}
+
+.control-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.display-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Control Cards */
+.control-card {
+    background: #111c2e;
+    border: 1px solid #1e3a5f;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    transition: border-color 0.2s ease;
+}
+
+.wizard-card {
+    border-top: 4px solid #0ea5e9;
+}
+
+.wizard-card:has(.wizard-active) {
+    border-top-color: #22c55e;
+}
+
+.stats-summary-card {
+    border-top: 4px solid #a855f7;
+    background: linear-gradient(145deg, #111c2e 0%, #15102a 100%);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #1e3a5f;
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin: 0;
+}
+
+/* Setup Form styles */
+.wizard-setup, .wizard-active {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.setup-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.setup-group label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748b;
+}
+
+.setup-row {
+    display: flex;
+    gap: 16px;
+}
+
+.flex-1 {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Scenario Toggle buttons */
+.scenario-toggle-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.toggle-btn {
+    flex: 1;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+    background: #334155;
+    color: #e2e8f0;
+}
+
+.toggle-btn.active.los {
+    background: rgba(14, 165, 233, 0.15);
+    border-color: #0ea5e9;
+    color: #0ea5e9;
+    box-shadow: 0 0 10px rgba(14, 165, 233, 0.1);
+}
+
+.toggle-btn.active.nlos {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: #f59e0b;
+    color: #f59e0b;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.1);
+}
+
+/* Port select & refresh button */
+.port-select-wrapper {
+    display: flex;
+    gap: 8px;
+}
+
+.port-select-wrapper select, .setup-group input[type="number"] {
+    width: 100%;
+    box-sizing: border-box;
+    background: #1e293b;
+    border: 1px solid #1e3a5f;
+    color: #f1f5f9;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.port-select-wrapper select:focus, .setup-group input[type="number"]:focus {
+    border-color: #0ea5e9;
+}
+
+.btn-refresh {
+    background: #1e293b;
+    border: 1px solid #1e3a5f;
+    color: #94a3b8;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-refresh:hover {
+    background: #1e3a5f;
+    color: #fff;
+    border-color: #0ea5e9;
+}
+
+/* Distance control with custom stepper buttons */
+.distance-control {
+    display: flex;
+    align-items: center;
+    background: #1e293b;
+    border: 1px solid #1e3a5f;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.dist-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    padding: 10px 16px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.dist-btn:hover {
+    background: #1e3a5f;
+    color: #fff;
+}
+
+.distance-input {
+    flex: 1;
+    background: transparent !important;
+    border: none !important;
+    text-align: center;
+    font-size: 16px !important;
+    font-weight: 700;
+    color: #f1f5f9;
+    width: 60px;
+    outline: none;
+}
+
+/* Hide spin buttons */
+.distance-input::-webkit-outer-spin-button,
+.distance-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.unit-label {
+    font-size: 12px;
+    color: #64748b;
+    margin-right: 8px;
+    user-select: none;
+}
+
+/* Buttons */
+.btn-start {
+    background: #0ea5e9;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+    transition: all 0.2s;
+    margin-top: 6px;
+}
+
+.btn-start:hover {
+    background: #0284c7;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4);
+}
+
+.btn-stop {
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.btn-stop:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+/* Wizard Active Capture Mode */
+.active-details {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid #1e3a5f;
+    border-radius: 8px;
+    padding: 14px 16px;
+}
+
+.active-details p {
+    margin: 0;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.active-scenario {
+    margin-bottom: 6px !important;
+}
+
+.active-details strong {
+    color: #22c55e;
+}
+
+.active-details span {
+    color: #e2e8f0;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+/* Progress bar styling */
+.progress-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 8px 0;
+}
+
+.progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.progress-bar-container {
+    background: #1e293b;
+    border-radius: 10px;
+    height: 10px;
+    overflow: hidden;
+    border: 1px solid #1e3a5f;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #22c55e 0%, #4ade80 100%);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+}
+
+/* Alerts */
+.alert-message {
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.alert-message.error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+}
+
+.alert-message.success {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #86efac;
+}
+
+/* Pulse animation indicator for live reading */
+.pulse-indicator {
+    width: 10px;
+    height: 10px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    }
+}
+
+/* Last Completed Run summary card */
+.summary-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #a855f7;
+    margin: 0 0 16px 0;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.summary-stat {
+    background: rgba(17, 28, 46, 0.4);
+    border: 1px solid rgba(30, 58, 95, 0.5);
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #64748b;
+    letter-spacing: 0.3px;
+}
+
+.stat-val {
+    font-size: 15px;
+    font-weight: 700;
+    color: #e2e8f0;
+}
+
+.stat-val.highlighted {
+    color: #a855f7;
+}
+
+.btn-advance {
+    background: #a855f7;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(168, 85, 247, 0.2);
+    transition: all 0.2s;
+}
+
+.btn-advance:hover {
+    background: #9333ea;
+    box-shadow: 0 6px 14px rgba(168, 85, 247, 0.3);
+}
+
+/* Right display container charts */
+.chart-card {
+    background: #111c2e;
+    border: 1px solid #1e3a5f;
+    border-radius: 12px;
+    padding: 20px;
+}
 .dashboard-loading {
     color: #64748b;
-    font-size: 16px;
-}
+    font-size: 15px;
+}

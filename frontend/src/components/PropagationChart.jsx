@@ -42,12 +42,21 @@ function PropagationChart({ losData, nlosData }) {
             <div className="propagation-chart">
                 <h2 className="chart-title">RSSI vs Distancia</h2>
                 <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={chartData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1e3a5f" />
-                        <XAxis dataKey="distancia" stroke="#64748b"
-                            label={{ value: 'Distancia (m)', position: 'insideBottom', offset: -5, fill: '#64748b' }} />
-                        <YAxis stroke="#64748b"
-                            label={{ value: 'RSSI (dBm)', angle: -90, position: 'insideLeft', fill: '#64748b' }} />
+                    <LineChart data={chartData} margin={{ top: 15, right: 15, left: 15, bottom: 25 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(30, 58, 95, 0.4)" />
+                        <XAxis 
+                            dataKey="distancia" 
+                            stroke="#64748b"
+                            height={45}
+                            tick={{ fill: '#64748b', fontSize: 12 }}
+                            label={{ value: 'Distancia (m)', position: 'insideBottom', offset: 0, fill: '#94a3b8', fontSize: 13, fontWeight: 500 }} 
+                        />
+                        <YAxis 
+                            stroke="#64748b"
+                            width={55}
+                            tick={{ fill: '#64748b', fontSize: 12 }}
+                            label={{ value: 'RSSI (dBm)', angle: -90, position: 'insideLeft', offset: -10, style: { textAnchor: 'middle' }, fill: '#94a3b8', fontSize: 13, fontWeight: 500 }} 
+                        />
                         <Tooltip contentStyle={{ backgroundColor: '#111c2e', border: '1px solid #1e3a5f', borderRadius: '8px' }}
                             labelStyle={{ color: '#f1f5f9' }} />
                         <Legend />
@@ -60,12 +69,21 @@ function PropagationChart({ losData, nlosData }) {
             <div className="propagation-chart">
                 <h2 className="chart-title">SNR vs Distancia</h2>
                 <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={chartData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1e3a5f" />
-                        <XAxis dataKey="distancia" stroke="#64748b"
-                            label={{ value: 'Distancia (m)', position: 'insideBottom', offset: -5, fill: '#64748b' }} />
-                        <YAxis stroke="#64748b"
-                            label={{ value: 'SNR (dB)', angle: -90, position: 'insideLeft', fill: '#64748b' }} />
+                    <LineChart data={chartData} margin={{ top: 15, right: 15, left: 15, bottom: 25 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(30, 58, 95, 0.4)" />
+                        <XAxis 
+                            dataKey="distancia" 
+                            stroke="#64748b"
+                            height={45}
+                            tick={{ fill: '#64748b', fontSize: 12 }}
+                            label={{ value: 'Distancia (m)', position: 'insideBottom', offset: 0, fill: '#94a3b8', fontSize: 13, fontWeight: 500 }} 
+                        />
+                        <YAxis 
+                            stroke="#64748b"
+                            width={55}
+                            tick={{ fill: '#64748b', fontSize: 12 }}
+                            label={{ value: 'SNR (dB)', angle: -90, position: 'insideLeft', offset: -10, style: { textAnchor: 'middle' }, fill: '#94a3b8', fontSize: 13, fontWeight: 500 }} 
+                        />
                         <Tooltip contentStyle={{ backgroundColor: '#111c2e', border: '1px solid #1e3a5f', borderRadius: '8px' }}
                             labelStyle={{ color: '#f1f5f9' }} />
                         <Legend />

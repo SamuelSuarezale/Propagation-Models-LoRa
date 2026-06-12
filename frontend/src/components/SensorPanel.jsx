@@ -12,12 +12,13 @@ function SensorCard({ title, value, unit, color }) {
     )
 }
 
-function SensorPanel({ losData, nlosData }) {
-    const latest = losData.length > 0 ? losData[losData.length - 1] : null
+function SensorPanel({ latestMeasurement, scenario }) {
+    const latest = latestMeasurement;
+    const scenarioName = scenario ? scenario.toUpperCase() : 'LOS';
 
     return (
         <div className="sensor-panel">
-            <h2 className="sensor-panel-title">Última Medición — LOS</h2>
+            <h2 className="sensor-panel-title">Última Medición — {scenarioName}</h2>
             <div className="sensor-grid">
                 <SensorCard
                     title="RSSI"

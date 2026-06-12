@@ -3,6 +3,7 @@ import Sidebar from './components/Sidebar'
 import Home from './pages/Home'
 import Dashboard from './pages/Dashboard'
 import Measurements from './pages/Measurements'
+import Models from './pages/Models'
 import './App.css'
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/measurements" element={<Measurements/>} />
-            <Route path="/models" element={<div>Modelos</div>} />
+            <Route path="/models" element={<Models/>} />
           </Routes>
         </main>
       </div>
